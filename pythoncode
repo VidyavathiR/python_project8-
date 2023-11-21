@@ -1,0 +1,100 @@
+from tkinter import *
+from tkinter import messagebox
+import os   
+import pywhatkit
+import smtplib
+from geopy.geocoders import Nominatim
+from twilio.rest import Client
+
+
+rt=Tk()
+rt.geometry('600x600')
+rt.configfrom tkinter import *
+from tkinter import messagebox
+ure(bg='#17202A')
+rt.title('Python project')
+rt.resizable(0,0)
+
+def note_pad():
+    os.system("notepad")
+
+def chrome():
+    os.system("chrome")
+
+def control_panel():
+    os.system("control")
+
+def send_watapp_msg():
+    phoneno=input("Enter your phone number with country code" )
+    msg=input("Enter the message you want to send")
+    #hr=input("Enter the time \(hour\)")
+   # minut=input("Enter the time\(min\)")
+  
+    pywhatkit.sendwhatmsg(phoneno,msg,6,31)
+
+
+def geo():
+    loc = Nominatim(user_agent="GetLoc")
+    getLoc = loc.geocode(input("enter your location \n"))
+
+    print(getLoc.address,"\n")
+    print("Latitude = ", getLoc.latitude, "\n")
+    print("Longitude = ", getLoc.longitude)
+
+
+
+def email():
+    sender_mail = input("enter sender email")   
+    receivers_mail = input("enter reciever email")
+    message ="hi......"   
+    try:    
+        password = input("enter two step verification-password of sender\'s mail")
+    
+        obj = smtplib.SMTP('smtp.gmail.com',587) 
+        obj.ehlo()
+        obj.starttls()
+        obj.login(sender_mail,password)    
+        obj.sendmail(sender_mail, receivers_mail, message)    
+        print("Successfully sent email")    
+    except Exception:    
+        print("Error: unable to send email") 
+
+
+#message
+account_sid = '**********************'
+auth_token = '******************'
+twilio_phone_number = '+**********'  # Should be in the format '+1234567890'
+
+def sms():
+    account_sid = '**********************'
+    auth_token = '******************'
+    twilio_phone_number = '+**********'  # Should be in the format '+1234567890'
+    def send_sms(to_phone_number, message):
+        client = Client(account_sid, auth_token)
+    
+        try:
+            message = client.messages.create(
+            body=message,
+            from_=twilio_phone_number,
+            to=to_phone_number
+            )
+            print(f"SMS sent successfully. SID: {message.sid}")
+        except Exception as e:
+            print(f"Failed to send SMS: {e}")
+
+
+if _name_ == "_main_":
+    recipient_phone_number = '+91**********'  # Replace with the recipient's phone number
+    text_message = "Hello from Twilio! This is a test message."
+    send_sms(recipient_phone_number, text_message)  
+
+
+Button(rt,text=" Notepad", font='Helvetica 18 bold',bg='#FDFEFE', command = note_pad, padx=20, relief='sunken',width=7). place(x= 250, y=140)
+Button(rt,text="Chrome", font='Helvetica 18 bold',bg='#FDFEFE',command =chrome, padx=20, relief='sunken',width=7).place(x= 250, y=200)
+Button(rt,text="watsapp", font='Helvetica 18 bold',bg='#FDFEFE',command =  send_watapp_msg, padx=20, relief='sunken',width=7).place(x= 250, y=260)
+Button(rt,text="geolocation", font='Helvetica 18 bold',bg='#FDFEFE', command = geo, relief='sunken',width=10).place(x= 250, y=325)
+Button(rt,text="Email", font='Helvetica 18 bold',bg='#FDFEFE', command = email, relief='sunken',width=10).place(x= 250, y=390)
+Button(rt,text="SMS", font='Helvetica 24 bold',bg='#FDFEFE', command = sms, relief='groove',width=10).place(x=250, y=450)
+Button(rt,text="controlpanel", font='Helvetica 24 bold',bg='#FDFEFE', command = control_panel, relief='groove',width=10).place(x=250, y=520)
+
+rt.mainloop()
